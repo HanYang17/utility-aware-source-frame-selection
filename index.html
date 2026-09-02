@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Downstream-utility-aware source-frame selection for reference-based video color grading.">
+  <title>Downstream-Utility-Aware Source-Frame Selection</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="wordmark" href="#top">SOURCE FRAME / 01</a>
+      <nav aria-label="Primary navigation">
+        <a href="#method">Method</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#release">Release</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero band">
+      <div class="hero-copy">
+        <p class="kicker">Reference-based video color grading</p>
+        <h1>Downstream-Utility-Aware Source-Frame Selection for Reference-Based Video Color Grading</h1>
+        <p class="lede">A learned decision layer estimates the grading utility of each candidate source frame using structural correspondence, local chromatic evidence, and global image context.</p>
+        <div class="byline">Yang Han*, Yaosen Chen, Yanru Zhang, Xin Duan <span>|</span> UESTC and Chengdu Sobey Digital Technology Co., Ltd.</div>
+      </div>
+      <div class="hero-metric" aria-label="Principal result">
+        <span class="metric-label">Principal VCG result</span>
+        <strong>27.43</strong><span class="metric-unit">dB</span>
+        <span class="metric-note">local decoded-resolution aggregate; 100 cases</span>
+      </div>
+    </section>
+
+    <section id="method" class="band method-band">
+      <div class="section-heading">
+        <p class="kicker">01 / Method</p>
+        <h2>Three observable signals, one downstream objective.</h2>
+      </div>
+      <div class="method-grid">
+        <div class="method-text">
+          <p>The selector receives one reference image and twenty candidate frames. Frozen DINOv2 patch descriptors provide spatial structure; a trainable RGB encoder preserves local chromatic evidence; frozen CLIP embeddings computed from the same DINO-aligned 32x32 RGB raster provide pooled image context.</p>
+          <p>Content cross-attention defines a correspondence map that also transports reference RGB tokens. A permutation-equivariant set encoder then scores candidates jointly. The selected frame is passed to the unchanged grading backend.</p>
+          <a class="text-link" href="https://github.com/HanYang17/utility-aware-source-frame-selection">View the code release <span aria-hidden="true">&#8594;</span></a>
+        </div>
+        <figure class="architecture">
+          <img src="motivation_case_comparison.png" alt="Motivation case comparing semantic and utility-aware source-frame selection.">
+          <figcaption>Motivation case: semantic similarity and downstream utility choose different conditioning frames.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="evidence" class="band evidence-band">
+      <div class="section-heading">
+        <p class="kicker">02 / Evidence</p>
+        <h2>Measured at the decision layer.</h2>
+      </div>
+      <div class="evidence-grid">
+        <article class="evidence-item">
+          <span class="evidence-index">A</span>
+          <h3>Principal VCG result</h3>
+          <p>The proposed selector reaches 27.43 dB on the 100-case VCG benchmark; VCG reports 24.55 dB.</p>
+          <strong>+2.88 dB</strong><span>arithmetic published-mean difference</span>
+        </article>
+        <article class="evidence-item">
+          <span class="evidence-index">B</span>
+          <h3>Multi-metric endpoint</h3>
+          <p>A matched VCG evaluator changes only the source-frame rule and measures pixel, learned-perceptual, and colorimetric fidelity.</p>
+          <strong>LPIPS / CIEDE2000</strong><span>both decrease in the matched controlled comparison</span>
+        </article>
+        <article class="evidence-item">
+          <span class="evidence-index">C</span>
+          <h3>Cross-backend scope</h3>
+          <p>The released evidence focuses on a fixed grading backend and separates complete-system and selection-rule results.</p>
+          <strong>VCG</strong><span>quantitative validation backend</span>
+        </article>
+      </div>
+      <div class="result-strip">
+        <div><span>LPIPS-Alex contrast</span><strong>-0.0043</strong></div>
+        <div><span>CIEDE2000 contrast</span><strong>-0.3782</strong></div>
+        <div><span>Cached selector latency</span><strong>4.82 ms</strong></div>
+      </div>
+      <figure class="architecture">
+        <img src="qualitative_comparison.png" alt="Four qualitative comparisons of semantic and utility-aware source-frame selection.">
+        <figcaption>Representative cases compare semantic matching with utility-aware selection and their downstream grading outputs.</figcaption>
+      </figure>
+    </section>
+
+    <section id="release" class="band release-band">
+      <div class="section-heading">
+        <p class="kicker">03 / Reproducibility</p>
+        <h2>Reproduction artifacts and boundaries.</h2>
+      </div>
+      <div class="release-layout">
+        <p>The public artifact package binds source code, configuration, checkpoint, evaluator contracts, figures, and the evidence ledger with SHA256 digests. The manuscript is distributed separately. Target frames, candidate utilities, test ground truth, third-party weights, and private remote scripts are excluded from the package.</p>
+        <div class="release-actions">
+          <a class="button" href="https://github.com/HanYang17/utility-aware-source-frame-selection">Release contents <span aria-hidden="true">&#8594;</span></a>
+          <a class="button secondary" href="https://github.com/HanYang17/utility-aware-source-frame-selection/raw/refs/heads/main/release_bundle.tar.gz">Download artifact bundle</a>
+        </div>
+      </div>
+      <p class="status-note">Code, checkpoint, configuration, and figures are packaged for public release. The manuscript is distributed separately, and benchmark media remain subject to their original terms.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>YANG HAN / 2026</span>
+    <span>Reference-frame selection for video color grading</span>
+  </footer>
+</body>
+</html>
