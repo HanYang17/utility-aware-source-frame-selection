@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Downstream-utility-aware source-frame selection for reference-based video color grading.">
-  <title>Downstream-Utility-Aware Source-Frame Selection</title>
+  <meta name="description" content="Content-color coupled source-frame selection for reference-based video color grading.">
+  <title>Content-Color Coupled Source-Frame Selection</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,101 +13,116 @@
     <div class="topbar-inner">
       <a class="wordmark" href="#top">SOURCE FRAME / 01</a>
       <nav aria-label="Primary navigation">
-        <a href="#method">Method</a>
-        <a href="#evidence">Evidence</a>
+        <a href="#problem">Problem</a>
+        <a href="#results">Results</a>
         <a href="#release">Release</a>
       </nav>
     </div>
   </header>
 
   <main id="top">
-    <section class="hero band">
+    <section class="hero">
       <div class="hero-copy">
-        <p class="kicker">Reference-based video color grading</p>
-        <h1>Downstream-Utility-Aware Source-Frame Selection for Reference-Based Video Color Grading</h1>
-        <p class="lede">A learned decision layer estimates the grading utility of each candidate source frame using structural correspondence, local chromatic evidence, and global image context.</p>
-        <div class="byline">Yang Han*, Yaosen Chen, Yanru Zhang, Xin Duan <span>|</span> UESTC and Chengdu Sobey Digital Technology Co., Ltd.</div>
-      </div>
-      <div class="hero-metric" aria-label="Principal result">
-        <span class="metric-label">Principal VCG result</span>
-        <strong>27.43</strong><span class="metric-unit">dB</span>
-        <span class="metric-note">local decoded-resolution aggregate; 100 cases</span>
-      </div>
-    </section>
-
-    <section id="method" class="band method-band">
-      <div class="section-heading">
-        <p class="kicker">01 / Method</p>
-        <h2>Three observable signals, one downstream objective.</h2>
-      </div>
-      <div class="method-grid">
-        <div class="method-text">
-          <p>The selector receives one reference image and twenty candidate frames. Frozen DINOv2 patch descriptors provide spatial structure; a trainable RGB encoder preserves local chromatic evidence; frozen CLIP embeddings computed from the same DINO-aligned 32x32 RGB raster provide pooled image context.</p>
-          <p>Content cross-attention defines a correspondence map that also transports reference RGB tokens. A permutation-equivariant set encoder then scores candidates jointly. The selected frame is passed to the unchanged grading backend.</p>
-          <a class="text-link" href="https://github.com/HanYang17/utility-aware-source-frame-selection">View the code release <span aria-hidden="true">&#8594;</span></a>
-        </div>
-        <figure class="architecture">
-          <img src="motivation_case_comparison.png" alt="Motivation case comparing semantic and utility-aware source-frame selection.">
-          <figcaption>Motivation case: semantic similarity and downstream utility choose different conditioning frames.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section id="evidence" class="band evidence-band">
-      <div class="section-heading">
-        <p class="kicker">02 / Evidence</p>
-        <h2>Measured at the decision layer.</h2>
-      </div>
-      <div class="evidence-grid">
-        <article class="evidence-item">
-          <span class="evidence-index">A</span>
-          <h3>Principal VCG result</h3>
-          <p>The proposed selector reaches 27.43 dB on the 100-case VCG benchmark; VCG reports 24.55 dB.</p>
-          <strong>+2.88 dB</strong><span>arithmetic published-mean difference</span>
-        </article>
-        <article class="evidence-item">
-          <span class="evidence-index">B</span>
-          <h3>Multi-metric endpoint</h3>
-          <p>A matched VCG evaluator changes only the source-frame rule and measures pixel, learned-perceptual, and colorimetric fidelity.</p>
-          <strong>LPIPS / CIEDE2000</strong><span>both decrease in the matched controlled comparison</span>
-        </article>
-        <article class="evidence-item">
-          <span class="evidence-index">C</span>
-          <h3>Cross-backend scope</h3>
-          <p>The released evidence focuses on a fixed grading backend and separates complete-system and selection-rule results.</p>
-          <strong>VCG</strong><span>quantitative validation backend</span>
-        </article>
-      </div>
-      <div class="result-strip">
-        <div><span>LPIPS-Alex contrast</span><strong>-0.0043</strong></div>
-        <div><span>CIEDE2000 contrast</span><strong>-0.3782</strong></div>
-        <div><span>Cached selector latency</span><strong>4.82 ms</strong></div>
-      </div>
-      <figure class="architecture">
-        <img src="qualitative_comparison.png" alt="Four qualitative comparisons of semantic and utility-aware source-frame selection.">
-        <figcaption>Representative cases compare semantic matching with utility-aware selection and their downstream grading outputs.</figcaption>
-      </figure>
-    </section>
-
-    <section id="release" class="band release-band">
-      <div class="section-heading">
-        <p class="kicker">03 / Reproducibility</p>
-        <h2>Reproduction artifacts and boundaries.</h2>
-      </div>
-      <div class="release-layout">
-        <p>The public artifact package binds source code, configuration, checkpoint, evaluator contracts, figures, and the evidence ledger with SHA256 digests. The manuscript is distributed separately. Target frames, candidate utilities, test ground truth, third-party weights, and private remote scripts are excluded from the package.</p>
-        <div class="release-actions">
-          <a class="button" href="https://github.com/HanYang17/utility-aware-source-frame-selection">Release contents <span aria-hidden="true">&#8594;</span></a>
-          <a class="button secondary" href="https://github.com/HanYang17/utility-aware-source-frame-selection/raw/refs/heads/main/release_bundle.tar.gz">Download artifact bundle</a>
+        <p class="eyebrow">Reference-based video color grading</p>
+        <h1>Choose the frame that makes the whole grade work.</h1>
+        <p class="lede">Content-color coupled source-frame selection predicts downstream grading utility instead of relying on semantic similarity alone.</p>
+        <p class="authors"><strong>Yang Han</strong><sup>*</sup>, Yaosen Chen, Yanru Zhang, Xin Duan<br>UESTC and Chengdu Sobey Digital Technology Co., Ltd.</p>
+        <div class="hero-actions">
+          <a class="button" href="https://github.com/HanYang17/utility-aware-source-frame-selection">View code</a>
+          <a class="button ghost" href="#demo">Watch the result</a>
         </div>
       </div>
-      <p class="status-note">Code, checkpoint, configuration, and figures are packaged for public release. The manuscript is distributed separately, and benchmark media remain subject to their original terms.</p>
+      <div class="hero-result">
+        <span class="result-label">100-case VCG evaluation</span>
+        <strong>27.43</strong><span class="unit">dB PSNR</span>
+        <p>Matched selection-rule comparison: +0.6450 dB PSNR, -0.0043 LPIPS-Alex, -0.3782 CIEDE2000.</p>
+      </div>
+    </section>
+
+    <section id="problem" class="section problem-section">
+      <div class="section-label"><span>01</span><span>Why this matters</span></div>
+      <div class="problem-grid">
+        <div>
+          <h2>Same subject does not mean usable color evidence.</h2>
+          <p class="section-copy">A semantic matcher can find a visually similar subject while missing the exposure and palette that a grading transform needs. Because one selected frame conditions the transform applied to every source frame, the selection decision is a downstream problem.</p>
+          <div class="signal-list">
+            <div><b>Content correspondence</b><span>Where are the same structures?</span></div>
+            <div><b>Local RGB evidence</b><span>Which colors can condition the transform?</span></div>
+            <div><b>Set-aware ranking</b><span>Which candidate wins among the whole pool?</span></div>
+          </div>
+        </div>
+        <div class="problem-visuals" aria-label="Case 087 selection comparison">
+          <figure class="image-frame"><img src="demo/cases/case_087/reference.png" alt="Case 087 grading reference"><figcaption>Reference appearance</figcaption></figure>
+          <figure class="image-frame"><img src="demo/cases/case_087/semantic_candidate.png" alt="Case 087 semantic-selected source frame"><figcaption>Semantic-selected frame 24</figcaption></figure>
+          <figure class="image-frame chosen-frame"><img src="demo/cases/case_087/utility_candidate.png" alt="Case 087 utility-aware source frame"><figcaption>Utility-aware frame 0</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" class="section demo-section">
+      <div class="section-label"><span>02</span><span>Result showcase</span></div>
+      <div class="section-intro">
+        <h2>One decision, visible across the whole video.</h2>
+        <p class="section-copy">The gallery keeps the comparison fixed: the same reference, two source-frame rules, their downstream outputs, and the target appearance.</p>
+      </div>
+      <div class="video-grid">
+        <article class="video-card">
+          <div class="video-heading"><span>Temporal trace A</span><b>City</b></div>
+          <video controls preload="metadata" poster="demo/cases/case_087/utility_output.png">
+            <source src="demo/videos/city_utility_aware_trace.mp4" type="video/mp4">
+          </video>
+          <p>Playable derived grading trace from the released diagnostic examples.</p>
+        </article>
+        <article class="video-card">
+          <div class="video-heading"><span>Temporal trace B</span><b>Monkey</b></div>
+          <video controls preload="metadata" poster="demo/cases/case_037/utility_output.png">
+            <source src="demo/videos/monkey_utility_aware_trace.mp4" type="video/mp4">
+          </video>
+          <p>Derived output video; benchmark inputs and target LUTs are not redistributed.</p>
+        </article>
+      </div>
+      <div class="spotlight">
+        <div class="spotlight-head">
+          <div><span class="case-tag">Best case-level gain</span><h3>Case 087</h3></div>
+          <div class="gain"><strong>+7.07 dB</strong><span>32.93 vs 25.85 dB</span></div>
+        </div>
+        <div class="comparison-grid">
+          <figure><img src="demo/cases/case_087/reference.png" alt="Case 087 grading reference"><figcaption>Reference</figcaption></figure>
+          <figure><img src="demo/cases/case_087/semantic_candidate.png" alt="Case 087 semantic-selected source frame"><figcaption>Semantic-selected frame 24</figcaption></figure>
+          <figure class="chosen"><img src="demo/cases/case_087/utility_candidate.png" alt="Case 087 utility-aware selected source frame"><figcaption>Utility-aware frame 0</figcaption></figure>
+          <figure><img src="demo/cases/case_087/semantic_output.png" alt="Case 087 output after semantic selection"><figcaption>Semantic output: 25.85 dB</figcaption></figure>
+          <figure class="chosen"><img src="demo/cases/case_087/utility_output.png" alt="Case 087 output after utility-aware selection"><figcaption>Utility-aware output: 32.93 dB</figcaption></figure>
+          <figure><img src="demo/cases/case_087/target.png" alt="Case 087 target appearance"><figcaption>Target appearance</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="section results-section">
+      <div class="section-label"><span>03</span><span>Controlled evidence</span></div>
+      <div class="section-intro"><h2>Consistent gains beyond one example.</h2><p class="section-copy">All aggregate numbers below use the same candidate pool, renderer, backend, and evaluator; only the source-frame rule changes.</p></div>
+      <div class="metric-row">
+        <div class="metric"><span>PSNR</span><strong>+0.6450</strong><small>dB vs. CLIP selection</small></div>
+        <div class="metric"><span>LPIPS-Alex</span><strong>-0.0043</strong><small>lower is better</small></div>
+        <div class="metric"><span>CIEDE2000</span><strong>-0.3782</strong><small>lower is better</small></div>
+        <div class="metric"><span>Improved cases</span><strong>62 / 100</strong><small>paired VCG evaluation</small></div>
+      </div>
+    </section>
+
+    <section class="section cases-section">
+      <div class="section-label"><span>04</span><span>More cases</span></div>
+      <div class="case-grid">
+        <article class="case-card"><div class="case-card-head"><h3>Case 016</h3><strong>+6.30 dB</strong></div><div class="mini-grid"><img src="demo/cases/case_016/semantic_candidate.png" alt="Case 016 semantic-selected frame"><img class="selected" src="demo/cases/case_016/utility_candidate.png" alt="Case 016 utility-aware frame"><img src="demo/cases/case_016/semantic_output.png" alt="Case 016 semantic output"><img class="selected" src="demo/cases/case_016/utility_output.png" alt="Case 016 utility-aware output"></div><p>23.21 dB semantic selection vs. 29.51 dB utility-aware selection.</p></article>
+        <article class="case-card"><div class="case-card-head"><h3>Case 060</h3><strong>+3.53 dB</strong></div><div class="mini-grid"><img src="demo/cases/case_060/semantic_candidate.png" alt="Case 060 semantic-selected frame"><img class="selected" src="demo/cases/case_060/utility_candidate.png" alt="Case 060 utility-aware frame"><img src="demo/cases/case_060/semantic_output.png" alt="Case 060 semantic output"><img class="selected" src="demo/cases/case_060/utility_output.png" alt="Case 060 utility-aware output"></div><p>22.26 dB semantic selection vs. 25.78 dB utility-aware selection.</p></article>
+        <article class="case-card"><div class="case-card-head"><h3>Case 037</h3><strong>+3.52 dB</strong></div><div class="mini-grid"><img src="demo/cases/case_037/semantic_candidate.png" alt="Case 037 semantic-selected frame"><img class="selected" src="demo/cases/case_037/utility_candidate.png" alt="Case 037 utility-aware frame"><img src="demo/cases/case_037/semantic_output.png" alt="Case 037 semantic output"><img class="selected" src="demo/cases/case_037/utility_output.png" alt="Case 037 utility-aware output"></div><p>25.13 dB semantic selection vs. 28.65 dB utility-aware selection.</p></article>
+      </div>
+    </section>
+
+    <section id="release" class="section release-section">
+      <div class="section-label"><span>05</span><span>Open artifacts</span></div>
+      <div class="release-grid"><div><h2>Inspect the implementation.</h2><p class="section-copy">The repository exposes the model, configuration, checkpoint, protocol tests, provenance metadata, and the visual cases used on this page. The manuscript PDF remains separate.</p></div><div class="release-actions"><a class="button" href="https://github.com/HanYang17/utility-aware-source-frame-selection">GitHub repository</a><a class="button ghost" href="../README.md">Read the release notes</a></div></div>
+      <p class="boundary">Benchmark videos, target ground truth, target LUTs, third-party weights, and renderer implementations remain subject to their original terms and are not redistributed.</p>
     </section>
   </main>
-
-  <footer class="footer">
-    <span>YANG HAN / 2026</span>
-    <span>Reference-frame selection for video color grading</span>
-  </footer>
+  <footer class="footer"><span>YANG HAN / 2026</span><span>Content-color coupled source-frame selection</span></footer>
 </body>
 </html>
